@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="ShipPolygonResource" load_steps=2 format=3 uid="uid://r30dno8mlijr"]
+
+[ext_resource type="Script" path="res://ShipPolygonResource.cs" id="1_2pu4d"]
+
+[resource]
+script = ExtResource("1_2pu4d")
+Points = PackedVector2Array(-24, 32, 0, -32, 24, 32)

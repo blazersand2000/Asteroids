@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://dwlp176eorrto"]
+
+[ext_resource type="PackedScene" uid="uid://dpd3k8ipovlxj" path="res://ship.tscn" id="1_1yyo6"]
+[ext_resource type="Script" path="res://Area2d.cs" id="2_sho7q"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tlc8w"]
+size = Vector2(77, 68)
+
+[node name="Level" type="Node2D"]
+
+[node name="Ship" parent="." instance=ExtResource("1_1yyo6")]
+position = Vector2(453, 338)
+ThrustPower = 700.0
+Friction = 40.0
+MaxSpeed = 800.0
+
+[node name="Area2D" type="Area2D" parent="."]
+script = ExtResource("2_sho7q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(151, 103)
+shape = SubResource("RectangleShape2D_tlc8w")
+
+[connection signal="area_entered" from="Area2D" to="Area2D" method="_on_area_entered"]
