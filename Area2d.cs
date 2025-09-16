@@ -1,3 +1,4 @@
+using Asteroids.Interfaces;
 using Godot;
 using System;
 
@@ -12,6 +13,10 @@ public partial class Area2d : Area2D
    private void OnAreaEntered(Area2D area)
    {
       GD.Print($"Area entered: {area.Name}");
+      if (area is IDamageable damageable)
+      {
+         damageable.TakeDamage(50);
+      }
    }
 
    // Called every frame. 'delta' is the elapsed time since the previous frame.

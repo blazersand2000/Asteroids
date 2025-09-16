@@ -1,7 +1,8 @@
 using Godot;
 using System;
+using Asteroids.Interfaces;
 
-public partial class Ship : Area2D
+public partial class Ship : Area2D, IDamageable
 {
    [Export]
    public float ThrustPower = 1000f;
@@ -36,6 +37,11 @@ public partial class Ship : Area2D
       HandleScreenWarp();
 
       //GD.Print($"Position: {Position}, Speed: {_velocity.Length()}");
+   }
+
+   public void TakeDamage(int amount)
+   {
+      GD.Print($"Took {amount} damage");
    }
 
    private void HandleRotation(double delta)
