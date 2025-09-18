@@ -12,12 +12,23 @@ public partial class Ship : Area2D, IDamageable
    public float Friction = 0.1f;
    [Export]
    public float MaxSpeed = 500f;
+   [Export]
+   public PackedScene LaserScene;
+   [Export]
+   public Node2D LaserParent;
+   private Marker2D laserCannon;
+   private Timer shootCooldownTimer;
    private Vector2 _velocity = Vector2.Zero;
    private const int OutOfBoundsBuffer = 32;
+   private bool canShoot = true;
 
    // Called when the node enters the scene tree for the first time.
    public override void _Ready()
    {
+      laserCannon = GetNode<Marker2D>("LaserCannon");
+      shootCooldownTimer = GetNode<Timer>("ShootCooldownTimer");
+
+      shootCooldownTimer.Timeout += OnShootCooldownTimeout;
    }
 
    // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -29,6 +40,7 @@ public partial class Ship : Area2D, IDamageable
    {
       HandleRotation(delta);
       HandleThrust(delta);
+      HandleShoot();
       HandleFriction(delta);
       LimitVelocity();
 
@@ -68,6 +80,32 @@ public partial class Ship : Area2D, IDamageable
          var direction = Vector2.Up.Rotated(Rotation);
          _velocity += direction * ThrustPower * (float)delta;
       }
+   }
+
+   private void HandleShoot()
+   {
+      if (Input.IsActionPressed("shoot"))
+      {
+         if (canShoot)
+         {
+            Shoot();
+            canShoot = false;
+            shootCooldownTimer.Start();
+         }
+      }
+   }
+
+   private void Shoot()
+   {
+      var laser = LaserScene.Instantiate<Node2D>();
+      laser.GlobalPosition = laserCannon.GlobalPosition;
+      laser.GlobalRotation = laserCannon.GlobalRotation;
+      LaserParent.AddChild(laser);
+   }
+
+   private void OnShootCooldownTimeout()
+   {
+      canShoot = true;
    }
 
    private void HandleFriction(double delta)
