@@ -16,6 +16,8 @@ public partial class Ship : Area2D, IDamageable
    public PackedScene LaserScene;
    [Export]
    public Node2D LaserParent;
+   [Export]
+   public HealthComponent HealthComponent;
    private Marker2D laserCannon;
    private Timer shootCooldownTimer;
    private Vector2 _velocity = Vector2.Zero;
@@ -29,6 +31,8 @@ public partial class Ship : Area2D, IDamageable
       shootCooldownTimer = GetNode<Timer>("ShootCooldownTimer");
 
       shootCooldownTimer.Timeout += OnShootCooldownTimeout;
+
+      HealthComponent.Died += OnDied;
    }
 
    // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -53,6 +57,7 @@ public partial class Ship : Area2D, IDamageable
 
    public void TakeDamage(int amount)
    {
+      HealthComponent.TakeDamage(amount);
       GD.Print($"Took {amount} damage");
    }
 
@@ -143,5 +148,10 @@ public partial class Ship : Area2D, IDamageable
       {
          _velocity = _velocity.Normalized() * MaxSpeed;
       }
+   }
+
+   private void OnDied()
+   {
+      GD.Print("Ship died!");
    }
 }
