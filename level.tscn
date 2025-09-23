@@ -1,10 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://dwlp176eorrto"]
 
 [ext_resource type="PackedScene" uid="uid://dpd3k8ipovlxj" path="res://ship.tscn" id="1_1yyo6"]
-[ext_resource type="Script" path="res://Area2d.cs" id="2_sho7q"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_tlc8w"]
-size = Vector2(77, 68)
+[ext_resource type="PackedScene" uid="uid://dacblnl0jjgbb" path="res://asteroid.tscn" id="2_ucdsg"]
+[ext_resource type="PackedScene" uid="uid://db5sfftfj7t4s" path="res://AsteroidManager.tscn" id="3_84c2m"]
 
 [node name="Level" type="Node2D"]
 
@@ -15,13 +13,11 @@ Friction = 40.0
 MaxSpeed = 800.0
 LaserParent = NodePath("../ProjectileManager")
 
-[node name="Area2D" type="Area2D" parent="."]
-script = ExtResource("2_sho7q")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-position = Vector2(151, 103)
-shape = SubResource("RectangleShape2D_tlc8w")
+[node name="Asteroid" parent="." instance=ExtResource("2_ucdsg")]
+position = Vector2(188, 107)
 
 [node name="ProjectileManager" type="Node2D" parent="."]
 
-[connection signal="area_entered" from="Area2D" to="Area2D" method="_on_area_entered"]
+[node name="AsteroidManager" parent="." instance=ExtResource("3_84c2m")]
+NumberOfAsteroids = 10
+AsteroidScenes = Array[PackedScene]([ExtResource("2_ucdsg")])
