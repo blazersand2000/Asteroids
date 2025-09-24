@@ -10,6 +10,11 @@ public partial class AsteroidManager : Node2D
    public int NumberOfAsteroids { get; set; }
    [Export]
    public PackedScene[] AsteroidScenes { get; set; }
+   [Export]
+   public Rect2 InitialNoSpawnZone { get; set; }
+
+   private const int OutOfBoundsBuffer = 50;
+   private const int SpawnBuffer = 30;
 
    private Timer _spawnTimer;
 
@@ -17,6 +22,8 @@ public partial class AsteroidManager : Node2D
    {
       _spawnTimer = GetNode<Timer>("SpawnTimer");
       _spawnTimer.Timeout += OnSpawnTimerTimeout;
+
+      SpawnInitialAsteriods();
    }
 
    public override void _Process(double delta)
@@ -24,28 +31,120 @@ public partial class AsteroidManager : Node2D
 
    }
 
-   private void OnSpawnTimerTimeout()
+   private void SpawnInitialAsteriods()
    {
-      var currentAsteroids = GetChildren().Where(IsAsteroid);
-      var asteroidsToSpawn = NumberOfAsteroids - currentAsteroids.Count();
-
-      for (int i = 0; i < asteroidsToSpawn; i++)
+      for (int i = 0; i < NumberOfAsteroids; i++)
       {
-         SpawnRandomAsteroid();
+         SpawnRandomAsteroidInMainArea();
       }
    }
 
-   private void SpawnRandomAsteroid()
+   private void OnSpawnTimerTimeout()
+   {
+      var currentAsteroids = GetChildren().OfType<Node2D>().Where(IsAsteroid).GroupBy(a => InBounds(a.Position));
+      var outOfBoundsAsteroids = currentAsteroids.FirstOrDefault(g => g.Key == false)?.ToList() ?? new();
+      var inBoundsAsteroids = currentAsteroids.FirstOrDefault(g => g.Key == true)?.ToList() ?? new();
+
+      foreach (var outOfBoundsAsteroid in outOfBoundsAsteroids)
+      {
+         outOfBoundsAsteroid.QueueFree();
+      }
+
+      var asteroidsToSpawn = NumberOfAsteroids - inBoundsAsteroids.Count;
+
+      for (int i = 0; i < asteroidsToSpawn; i++)
+      {
+         SpawnRandomAsteroidAlongScreenPerimiter();
+      }
+   }
+
+   private bool InBounds(Vector2 position)
+   {
+      return GetViewportRect().Abs().Grow(OutOfBoundsBuffer).HasPoint(position);
+   }
+
+   private Vector2 GetRandomPerimiterSpawnLocation()
+   {
+      var outer = GetViewportRect().Grow(OutOfBoundsBuffer);
+      var inner = GetViewportRect().Grow(SpawnBuffer);
+
+      return GetRandomPointBetweenRects(outer, inner);
+   }
+
+   private Vector2 GetRandomMainAreaSpawnLocation()
+   {
+      var outer = GetViewportRect().Grow(SpawnBuffer);
+      var inner = InitialNoSpawnZone;
+
+      return GetRandomPointBetweenRects(outer, inner);
+   }
+
+   private Vector2 GetRandomPointBetweenRects(Rect2 outer, Rect2 inner)
+   {
+      if (!outer.Encloses(inner))
+      {
+         throw new InvalidOperationException("Outer must enclose inner");
+      }
+
+      // top and bottom go full width
+      var top = new Rect2(outer.Position, new Vector2(outer.Size.X, inner.Position.Y - outer.Position.Y));
+      var bottom = new Rect2(new Vector2(outer.Position.X, inner.End.Y), new Vector2(outer.Size.X, outer.End.Y - inner.End.Y));
+      //left and right don't go full height since top and bottom took care of that
+      var left = new Rect2(new Vector2(outer.Position.X, inner.Position.Y), new Vector2(inner.Position.X - outer.Position.X, inner.Size.Y));
+      var right = new Rect2(new Vector2(inner.End.X, inner.Position.Y), new Vector2(outer.End.X - inner.End.X, inner.End.Y - inner.Position.Y));
+
+      GD.Print($"top: {top}");
+      GD.Print($"bottom: {bottom}");
+      GD.Print($"left: {left}");
+      GD.Print($"right: {right}");
+
+      var weightedRects = new List<Rect2> { top, bottom, left, right }.Select(r => (r, r.Area));
+      var rect = GetWeightedRandom(weightedRects);
+      var randX = (float)GD.RandRange(rect.Position.X, rect.End.X);
+      var randY = (float)GD.RandRange(rect.Position.Y, rect.End.Y);
+
+      return new Vector2(randX, randY);
+   }
+
+   private T GetWeightedRandom<T>(IEnumerable<(T Item, float Weight)> items)
+   {
+      var threshold = GD.Randf() * items.Sum(i => i.Weight);
+      var cumulative = 0f;
+      foreach (var item in items)
+      {
+         cumulative += item.Weight;
+         if (cumulative > threshold)
+         {
+            return item.Item;
+         }
+      }
+      return items.Last().Item;
+   }
+
+   private void SpawnRandomAsteroidAlongScreenPerimiter()
+   {
+      var position = GetRandomPerimiterSpawnLocation();
+      SpawnRandomAsteroid(position);
+   }
+
+   private void SpawnRandomAsteroidInMainArea()
+   {
+      var position = GetRandomMainAreaSpawnLocation();
+      SpawnRandomAsteroid(position);
+   }
+
+   private void SpawnRandomAsteroid(Vector2 position)
    {
       var asteroid = AsteroidScenes[GD.Randi() % AsteroidScenes.Length].Instantiate<Node2D>();
       var asteroidComponent = asteroid.GetChildren().OfType<AsteroidComponent>().FirstOrDefault();
       if (asteroidComponent != null)
       {
-         asteroidComponent.Velocity = new Vector2((float)GD.RandRange(1d, 5d), (float)GD.RandRange(1d, 5d));
+         var speed = GD.RandRange(100d, 500d);
+         var direction = GD.Randf() * Mathf.Tau;
+         asteroidComponent.Velocity = Vector2.Up.Rotated(direction) * (float)speed;
          asteroidComponent.RotationSpeedRadians = (float)GD.RandRange(0.25d, 2d);
       }
-      var screenSize = GetViewportRect().Abs().Size;
-      asteroid.Position = new Vector2((float)GD.RandRange(0d, screenSize.X), (float)GD.RandRange(0, screenSize.Y));
+      asteroid.Position = position;
 
       AddChild(asteroid);
    }
