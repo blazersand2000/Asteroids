@@ -14,6 +14,14 @@ public partial class HealthComponent : Node
       currentHealth = MaxHealth;
    }
 
+   /// <summary>
+   /// Applies the amount of damage to drain health, killing the entity
+   /// </summary>
+   public void Kill()
+   {
+      TakeDamage(currentHealth);
+   }
+
    public void TakeDamage(int amount)
    {
       currentHealth -= amount;

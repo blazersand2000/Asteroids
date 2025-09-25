@@ -1,3 +1,4 @@
+using Asteroids;
 using Asteroids.Interfaces;
 using Godot;
 using System;
@@ -16,10 +17,9 @@ public partial class AsteroidComponent : Node
 
    private void OnAreaEntered(Area2D area)
    {
-      GD.Print($"Area entered: {area.Name}");
-      if (area is IDamageable damageable)
+      if (area.TryGetComponent<HealthComponent>(out var healthComponent) && area.IsInGroup(Groups.Player))
       {
-         damageable.TakeDamage(50);
+         healthComponent.Kill();
       }
    }
 

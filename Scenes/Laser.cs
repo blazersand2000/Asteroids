@@ -1,3 +1,4 @@
+using Asteroids;
 using Godot;
 using System;
 using System.Reflection.Metadata;
@@ -11,6 +12,8 @@ public partial class Laser : Area2D
    // Called when the node enters the scene tree for the first time.
    public override void _Ready()
    {
+      AddToGroup(Groups.PlayerProjectile);
+      AreaEntered += OnAreaEntered;
    }
 
    // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,5 +38,15 @@ public partial class Laser : Area2D
           || GlobalPosition.X > screenSize.X + OutOfBoundsBuffer
           || GlobalPosition.Y < -OutOfBoundsBuffer
           || GlobalPosition.Y > screenSize.Y + OutOfBoundsBuffer;
+   }
+
+   private void OnAreaEntered(Area2D area)
+   {
+      if (area.TryGetComponent<HealthComponent>(out var healthComponent) && area.IsInGroup(Groups.Enemy))
+      {
+         GD.Print("Laser hit something!");
+         healthComponent.Kill();
+         QueueFree();
+      }
    }
 }

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bvn6xn5bpr2y1"]
 
-[ext_resource type="Script" path="res://AsteroidComponent.cs" id="1_e0hbb"]
+[ext_resource type="Script" path="res://Scenes/Components/AsteroidComponent.cs" id="1_e0hbb"]
 
 [node name="AsteroidComponent" type="Node"]
 script = ExtResource("1_e0hbb")

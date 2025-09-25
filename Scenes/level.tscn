@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwlp176eorrto"]
+
+[ext_resource type="PackedScene" uid="uid://dpd3k8ipovlxj" path="res://Scenes/ship.tscn" id="1_q7n7w"]
+[ext_resource type="PackedScene" uid="uid://db5sfftfj7t4s" path="res://Scenes/AsteroidManager.tscn" id="3_gm6gn"]
+
+[node name="Level" type="Node2D"]
+
+[node name="Ship" parent="." node_paths=PackedStringArray("LaserParent") instance=ExtResource("1_q7n7w")]
+position = Vector2(453, 338)
+ThrustPower = 700.0
+Friction = 40.0
+MaxSpeed = 800.0
+LaserParent = NodePath("../ProjectileManager")
+
+[node name="ProjectileManager" type="Node2D" parent="."]
+
+[node name="AsteroidManager" parent="." instance=ExtResource("3_gm6gn")]
+NumberOfAsteroids = 10

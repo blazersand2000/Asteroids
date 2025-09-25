@@ -1,6 +1,8 @@
 using Godot;
 using System;
 using Asteroids.Interfaces;
+using System.Text.RegularExpressions;
+using Asteroids;
 
 public partial class Ship : Area2D, IDamageable
 {
@@ -33,6 +35,8 @@ public partial class Ship : Area2D, IDamageable
       shootCooldownTimer.Timeout += OnShootCooldownTimeout;
 
       HealthComponent.Died += OnDied;
+
+      AddToGroup(Groups.Player);
    }
 
    // Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -1,3 +1,4 @@
+using Asteroids;
 using Godot;
 using System;
 using System.Collections;
@@ -9,7 +10,9 @@ public partial class AsteroidManager : Node2D
    [Export]
    public int NumberOfAsteroids { get; set; }
    [Export]
-   public PackedScene[] AsteroidScenes { get; set; }
+   public PackedScene AsteroidBaseScene { get; set; }
+   [Export]
+   public PackedScene[] SpecificAsteroidScenes { get; set; }
    [Export]
    public Rect2 InitialNoSpawnZone { get; set; }
 
@@ -93,10 +96,10 @@ public partial class AsteroidManager : Node2D
       var left = new Rect2(new Vector2(outer.Position.X, inner.Position.Y), new Vector2(inner.Position.X - outer.Position.X, inner.Size.Y));
       var right = new Rect2(new Vector2(inner.End.X, inner.Position.Y), new Vector2(outer.End.X - inner.End.X, inner.End.Y - inner.Position.Y));
 
-      GD.Print($"top: {top}");
-      GD.Print($"bottom: {bottom}");
-      GD.Print($"left: {left}");
-      GD.Print($"right: {right}");
+      // GD.Print($"top: {top}");
+      // GD.Print($"bottom: {bottom}");
+      // GD.Print($"left: {left}");
+      // GD.Print($"right: {right}");
 
       var weightedRects = new List<Rect2> { top, bottom, left, right }.Select(r => (r, r.Area));
       var rect = GetWeightedRandom(weightedRects);
@@ -110,12 +113,12 @@ public partial class AsteroidManager : Node2D
    {
       var threshold = GD.Randf() * items.Sum(i => i.Weight);
       var cumulative = 0f;
-      foreach (var item in items)
+      foreach (var (Item, Weight) in items)
       {
-         cumulative += item.Weight;
+         cumulative += Weight;
          if (cumulative > threshold)
          {
-            return item.Item;
+            return Item;
          }
       }
       return items.Last().Item;
@@ -135,22 +138,35 @@ public partial class AsteroidManager : Node2D
 
    private void SpawnRandomAsteroid(Vector2 position)
    {
-      var asteroid = AsteroidScenes[GD.Randi() % AsteroidScenes.Length].Instantiate<Node2D>();
-      var asteroidComponent = asteroid.GetChildren().OfType<AsteroidComponent>().FirstOrDefault();
-      if (asteroidComponent != null)
+      var asteroid = AsteroidBaseScene.Instantiate<AsteroidBase>();
+      asteroid.SetVisualScene(SpecificAsteroidScenes[GD.Randi() % SpecificAsteroidScenes.Length]);
+      asteroid.AddToGroup(Groups.Enemy);
+
+      if (asteroid.TryGetComponent<AsteroidComponent>(out var asteroidComponent))
       {
          var speed = GD.RandRange(100d, 500d);
          var direction = GD.Randf() * Mathf.Tau;
          asteroidComponent.Velocity = Vector2.Up.Rotated(direction) * (float)speed;
          asteroidComponent.RotationSpeedRadians = (float)GD.RandRange(0.25d, 2d);
       }
+
+      if (asteroid.TryGetComponent<HealthComponent>(out var healthComponent))
+      {
+         healthComponent.Died += () => OnAsteroidDestroyed(asteroid);
+      }
+
       asteroid.Position = position;
 
       AddChild(asteroid);
    }
 
+   private void OnAsteroidDestroyed(Node2D asteroid)
+   {
+      asteroid.QueueFree();
+   }
+
    private static bool IsAsteroid(Node thing)
    {
-      return thing.GetChildren().OfType<AsteroidComponent>().Count() > 0;
+      return thing.TryGetComponent<AsteroidComponent>(out _);
    }
 }

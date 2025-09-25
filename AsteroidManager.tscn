@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://db5sfftfj7t4s"]
-
-[ext_resource type="Script" path="res://AsteroidManager.cs" id="1_jenya"]
-
-[node name="AsteroidManager" type="Node2D"]
-script = ExtResource("1_jenya")
-
-[node name="SpawnTimer" type="Timer" parent="."]
-autostart = true

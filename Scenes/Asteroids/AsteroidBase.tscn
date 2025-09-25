@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://dacblnl0jjgbb"]
+
+[ext_resource type="Script" path="res://Scenes/Asteroids/AsteroidBase.cs" id="1_a4k2s"]
+[ext_resource type="PackedScene" uid="uid://bvn6xn5bpr2y1" path="res://Scenes/Components/AsteroidComponent.tscn" id="1_dp033"]
+[ext_resource type="PackedScene" uid="uid://b8af0ughudgiy" path="res://Scenes/Components/healthComponent.tscn" id="2_c4yp6"]
+[ext_resource type="PackedScene" uid="uid://dkl1klwmx42n6" path="res://Scenes/Asteroids/BigAsteroid1.tscn" id="3_jhljw"]
+
+[node name="AsteroidBase" type="Node2D"]
+script = ExtResource("1_a4k2s")
+
+[node name="AsteroidComponent" parent="." node_paths=PackedStringArray("AsteroidArea2D") instance=ExtResource("1_dp033")]
+AsteroidArea2D = NodePath("../VisualsContainer/BigAsteroid1")
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_c4yp6")]
+
+[node name="VisualsContainer" type="Node" parent="."]
+
+[node name="BigAsteroid1" parent="VisualsContainer" instance=ExtResource("3_jhljw")]
