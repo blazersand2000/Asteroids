@@ -1,9 +1,15 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwlp176eorrto"]
+[gd_scene load_steps=5 format=3 uid="uid://dwlp176eorrto"]
 
+[ext_resource type="PackedScene" uid="uid://cbf74xd2hs22k" path="res://Scenes/StarManager.tscn" id="1_os22f"]
 [ext_resource type="PackedScene" uid="uid://dpd3k8ipovlxj" path="res://Scenes/ship.tscn" id="1_q7n7w"]
+[ext_resource type="PackedScene" uid="uid://c8uxhqcv0ystn" path="res://Scenes/Star.tscn" id="2_rhl2a"]
 [ext_resource type="PackedScene" uid="uid://db5sfftfj7t4s" path="res://Scenes/AsteroidManager.tscn" id="3_gm6gn"]
 
 [node name="Level" type="Node2D"]
+
+[node name="StarManager" parent="." instance=ExtResource("1_os22f")]
+StarScene = ExtResource("2_rhl2a")
+StarDensity = 15
 
 [node name="Ship" parent="." node_paths=PackedStringArray("LaserParent") instance=ExtResource("1_q7n7w")]
 position = Vector2(453, 338)

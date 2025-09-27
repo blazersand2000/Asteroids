@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8uxhqcv0ystn"]
+
+[ext_resource type="Script" path="res://Scenes/Star.cs" id="1_mngww"]
+[ext_resource type="Texture2D" uid="uid://3bk08q78n6v2" path="res://Assets/star.png" id="1_qoffn"]
+
+[node name="Star" type="Node2D"]
+script = ExtResource("1_mngww")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.05, 0.05)
+texture = ExtResource("1_qoffn")

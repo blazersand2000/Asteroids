@@ -21,6 +21,7 @@ public partial class Ship : Area2D
    public HealthComponent HealthComponent;
    private Marker2D laserCannon;
    private Timer shootCooldownTimer;
+   private AudioStreamPlayer audioStreamPlayer;
    private Vector2 _velocity = Vector2.Zero;
    private const int OutOfBoundsBuffer = 32;
    private bool canShoot = true;
@@ -30,6 +31,7 @@ public partial class Ship : Area2D
    {
       laserCannon = GetNode<Marker2D>("LaserCannon");
       shootCooldownTimer = GetNode<Timer>("ShootCooldownTimer");
+      audioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
 
       shootCooldownTimer.Timeout += OnShootCooldownTimeout;
 
@@ -103,6 +105,7 @@ public partial class Ship : Area2D
       laser.GlobalPosition = laserCannon.GlobalPosition;
       laser.GlobalRotation = laserCannon.GlobalRotation;
       LaserParent.AddChild(laser);
+      audioStreamPlayer.Play(0.26f);
    }
 
    private void OnShootCooldownTimeout()
