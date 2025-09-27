@@ -2,9 +2,9 @@
 
 namespace Asteroids;
 
-public static class Groups
+public enum Groups
 {
-   public const string Player = "Player";
-   public const string PlayerProjectile = "PlayerProjectile";
-   public const string Enemy = "Enemy";
+   Player,
+   PlayerProjectile,
+   Enemy,
 }

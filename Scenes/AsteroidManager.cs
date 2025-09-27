@@ -139,15 +139,15 @@ public partial class AsteroidManager : Node2D
    private void SpawnRandomAsteroid(Vector2 position)
    {
       var asteroid = AsteroidBaseScene.Instantiate<AsteroidBase>();
-      asteroid.SetVisualScene(SpecificAsteroidScenes[GD.Randi() % SpecificAsteroidScenes.Length]);
-      asteroid.AddToGroup(Groups.Enemy);
+      asteroid.CallDeferred(AsteroidBase.MethodName.SetVisuals, SpecificAsteroidScenes[GD.Randi() % SpecificAsteroidScenes.Length]);
+      asteroid.AddToGroup(Groups.Enemy.ToString());
 
       if (asteroid.TryGetComponent<AsteroidComponent>(out var asteroidComponent))
       {
          var speed = GD.RandRange(100d, 500d);
          var direction = GD.Randf() * Mathf.Tau;
          asteroidComponent.Velocity = Vector2.Up.Rotated(direction) * (float)speed;
-         asteroidComponent.RotationSpeedRadians = (float)GD.RandRange(0.25d, 2d);
+         asteroidComponent.RotationSpeedRadians = (float)GD.RandRange(-2d, 2d);
       }
 
       if (asteroid.TryGetComponent<HealthComponent>(out var healthComponent))
@@ -162,6 +162,7 @@ public partial class AsteroidManager : Node2D
 
    private void OnAsteroidDestroyed(Node2D asteroid)
    {
+      GD.Print("Asteroid died@!");
       asteroid.QueueFree();
    }
 

@@ -1,10 +1,9 @@
 using Godot;
 using System;
-using Asteroids.Interfaces;
 using System.Text.RegularExpressions;
 using Asteroids;
 
-public partial class Ship : Area2D, IDamageable
+public partial class Ship : Area2D
 {
    [Export]
    public float ThrustPower = 1000f;
@@ -36,7 +35,7 @@ public partial class Ship : Area2D, IDamageable
 
       HealthComponent.Died += OnDied;
 
-      AddToGroup(Groups.Player);
+      AddToGroup(Groups.Player.ToString());
    }
 
    // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -57,12 +56,6 @@ public partial class Ship : Area2D, IDamageable
       HandleScreenWarp();
 
       //GD.Print($"Position: {Position}, Speed: {_velocity.Length()}");
-   }
-
-   public void TakeDamage(int amount)
-   {
-      HealthComponent.TakeDamage(amount);
-      GD.Print($"Took {amount} damage");
    }
 
    private void HandleRotation(double delta)

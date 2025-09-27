@@ -1,15 +1,18 @@
 using Godot;
 using System;
+using System.Linq;
 
 public partial class AsteroidBase : Node2D
 {
-   private Node _visualsContainer;
    private AsteroidComponent _asteroidComponent;
+   private Sprite2D _asteroidSprite;
+   private CollisionShape2D _collisionShape2D;
 
    public override void _Ready()
    {
-      _visualsContainer = GetNode("VisualsContainer");
       _asteroidComponent = GetNode<AsteroidComponent>("AsteroidComponent");
+      _asteroidSprite = GetNode<Sprite2D>("AsteroidSprite");
+      _collisionShape2D = GetNode<CollisionShape2D>("HurtboxComponent/AsteroidCollisionShape");
    }
 
    // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -17,15 +20,15 @@ public partial class AsteroidBase : Node2D
    {
    }
 
-   public void SetVisualScene(PackedScene visualScene)
+   public void SetVisuals(PackedScene visualScene)
    {
-      foreach (var child in _visualsContainer.GetChildren())
-      {
-         child.QueueFree();
-      }
+      var visuals = visualScene.Instantiate<Node2D>();
+      var sprite = visuals.GetChildren().OfType<Sprite2D>().First();
+      var collisionShape = visuals.GetChildren().OfType<CollisionShape2D>().First();
 
-      var visuals = visualScene.Instantiate<Area2D>();
-      _visualsContainer.AddChild(visuals);
-      _asteroidComponent.AsteroidArea2D = visuals;
+      _asteroidSprite.Texture = sprite.Texture;
+      _collisionShape2D.Shape = collisionShape.Shape;
+
+      visuals.QueueFree();
    }
 }

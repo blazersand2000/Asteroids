@@ -1,10 +1,11 @@
 using Asteroids;
-using Asteroids.Interfaces;
 using Godot;
 using System;
 
 public partial class AsteroidComponent : Node
 {
+   [Export]
+   public Node2D AsteroidNode2D { get; set; }
    [Export]
    public Area2D AsteroidArea2D { get; set; }
    public float RotationSpeedRadians { get; set; } = 0f;
@@ -17,9 +18,9 @@ public partial class AsteroidComponent : Node
 
    private void OnAreaEntered(Area2D area)
    {
-      if (area.TryGetComponent<HealthComponent>(out var healthComponent) && area.IsInGroup(Groups.Player))
+      if (area is HurtboxComponent hurtboxComponent)
       {
-         healthComponent.Kill();
+         hurtboxComponent.TryKill(this.GetParentGroups());
       }
    }
 
@@ -30,7 +31,7 @@ public partial class AsteroidComponent : Node
 
    public override void _PhysicsProcess(double delta)
    {
-      AsteroidArea2D.Rotate(RotationSpeedRadians * (float)delta);
-      AsteroidArea2D.Position += Velocity * (float)delta;
+      AsteroidNode2D.Rotate(RotationSpeedRadians * (float)delta);
+      AsteroidNode2D.Position += Velocity * (float)delta;
    }
 }

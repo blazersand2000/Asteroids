@@ -1,6 +1,7 @@
 using Asteroids;
 using Godot;
 using System;
+using System.Linq;
 using System.Reflection.Metadata;
 
 public partial class Laser : Area2D
@@ -12,7 +13,7 @@ public partial class Laser : Area2D
    // Called when the node enters the scene tree for the first time.
    public override void _Ready()
    {
-      AddToGroup(Groups.PlayerProjectile);
+      AddToGroup(Groups.PlayerProjectile.ToString());
       AreaEntered += OnAreaEntered;
    }
 
@@ -42,10 +43,10 @@ public partial class Laser : Area2D
 
    private void OnAreaEntered(Area2D area)
    {
-      if (area.TryGetComponent<HealthComponent>(out var healthComponent) && area.IsInGroup(Groups.Enemy))
+      if (area is HurtboxComponent hurtboxComponent)
       {
-         GD.Print("Laser hit something!");
-         healthComponent.Kill();
+         var killedTheThing = hurtboxComponent.TryKill(GetGroups());
+         GD.Print($"laser killed asteroid? {killedTheThing}");
          QueueFree();
       }
    }
