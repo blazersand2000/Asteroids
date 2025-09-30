@@ -19,13 +19,8 @@ public partial class AsteroidManager : Node2D
    private const int OutOfBoundsBuffer = 50;
    private const int SpawnBuffer = 30;
 
-   private Timer _spawnTimer;
-
    public override void _Ready()
    {
-      _spawnTimer = GetNode<Timer>("SpawnTimer");
-      _spawnTimer.Timeout += OnSpawnTimerTimeout;
-
       SpawnInitialAsteriods();
    }
 
@@ -40,38 +35,6 @@ public partial class AsteroidManager : Node2D
       {
          SpawnRandomAsteroidInMainArea();
       }
-   }
-
-   private void OnSpawnTimerTimeout()
-   {
-      var currentAsteroids = GetChildren().OfType<Node2D>().Where(IsAsteroid).GroupBy(a => InBounds(a.Position));
-      var outOfBoundsAsteroids = currentAsteroids.FirstOrDefault(g => g.Key == false)?.ToList() ?? new();
-      var inBoundsAsteroids = currentAsteroids.FirstOrDefault(g => g.Key == true)?.ToList() ?? new();
-
-      foreach (var outOfBoundsAsteroid in outOfBoundsAsteroids)
-      {
-         outOfBoundsAsteroid.QueueFree();
-      }
-
-      var asteroidsToSpawn = NumberOfAsteroids - inBoundsAsteroids.Count;
-
-      for (int i = 0; i < asteroidsToSpawn; i++)
-      {
-         SpawnRandomAsteroidAlongScreenPerimiter();
-      }
-   }
-
-   private bool InBounds(Vector2 position)
-   {
-      return GetViewportRect().Abs().Grow(OutOfBoundsBuffer).HasPoint(position);
-   }
-
-   private Vector2 GetRandomPerimiterSpawnLocation()
-   {
-      var outer = GetViewportRect().Grow(OutOfBoundsBuffer);
-      var inner = GetViewportRect().Grow(SpawnBuffer);
-
-      return GetRandomPointBetweenRects(outer, inner);
    }
 
    private Vector2 GetRandomMainAreaSpawnLocation()
@@ -96,11 +59,6 @@ public partial class AsteroidManager : Node2D
       var left = new Rect2(new Vector2(outer.Position.X, inner.Position.Y), new Vector2(inner.Position.X - outer.Position.X, inner.Size.Y));
       var right = new Rect2(new Vector2(inner.End.X, inner.Position.Y), new Vector2(outer.End.X - inner.End.X, inner.End.Y - inner.Position.Y));
 
-      // GD.Print($"top: {top}");
-      // GD.Print($"bottom: {bottom}");
-      // GD.Print($"left: {left}");
-      // GD.Print($"right: {right}");
-
       var weightedRects = new List<Rect2> { top, bottom, left, right }.Select(r => (r, r.Area));
       var rect = GetWeightedRandom(weightedRects);
       var randX = (float)GD.RandRange(rect.Position.X, rect.End.X);
@@ -124,12 +82,6 @@ public partial class AsteroidManager : Node2D
       return items.Last().Item;
    }
 
-   private void SpawnRandomAsteroidAlongScreenPerimiter()
-   {
-      var position = GetRandomPerimiterSpawnLocation();
-      SpawnRandomAsteroid(position);
-   }
-
    private void SpawnRandomAsteroidInMainArea()
    {
       var position = GetRandomMainAreaSpawnLocation();
@@ -144,7 +96,7 @@ public partial class AsteroidManager : Node2D
 
       if (asteroid.TryGetComponent<AsteroidComponent>(out var asteroidComponent))
       {
-         var speed = GD.RandRange(100d, 500d);
+         var speed = GD.RandRange(100d, 300d);
          var direction = GD.Randf() * Mathf.Tau;
          asteroidComponent.Velocity = Vector2.Up.Rotated(direction) * (float)speed;
          asteroidComponent.RotationSpeedRadians = (float)GD.RandRange(-2d, 2d);
@@ -162,12 +114,7 @@ public partial class AsteroidManager : Node2D
 
    private void OnAsteroidDestroyed(Node2D asteroid)
    {
-      GD.Print("Asteroid died@!");
+      GD.Print("Asteroid died!");
       asteroid.QueueFree();
-   }
-
-   private static bool IsAsteroid(Node thing)
-   {
-      return thing.TryGetComponent<AsteroidComponent>(out _);
    }
 }
