@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://i85o803dc5qo"]
+
+[ext_resource type="Script" path="res://Scenes/Components/ScreenWarpComponent.cs" id="1_41fno"]
+
+[node name="ScreenWarpComponent" type="Node"]
+editor_description = "When an entity goes off screen, this component causes it to wrap around to the other side of the screen."
+script = ExtResource("1_41fno")

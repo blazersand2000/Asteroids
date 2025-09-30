@@ -23,7 +23,6 @@ public partial class Ship : Area2D
    private Timer shootCooldownTimer;
    private AudioStreamPlayer audioStreamPlayer;
    private Vector2 _velocity = Vector2.Zero;
-   private const int OutOfBoundsBuffer = 32;
    private bool canShoot = true;
 
    // Called when the node enters the scene tree for the first time.
@@ -54,8 +53,6 @@ public partial class Ship : Area2D
       LimitVelocity();
 
       Position += _velocity * (float)delta;
-
-      HandleScreenWarp();
 
       //GD.Print($"Position: {Position}, Speed: {_velocity.Length()}");
    }
@@ -118,28 +115,6 @@ public partial class Ship : Area2D
       var velocityDirection = _velocity.Normalized();
       var oppositeDirection = -velocityDirection;
       _velocity += oppositeDirection * Friction * (float)delta;
-   }
-
-   private void HandleScreenWarp()
-   {
-      var screenSize = GetViewportRect().Size;
-      if (Position.X < -OutOfBoundsBuffer)
-      {
-         Position = new Vector2(screenSize.X + OutOfBoundsBuffer, Position.Y);
-      }
-      else if (Position.X > screenSize.X + OutOfBoundsBuffer)
-      {
-         Position = new Vector2(-OutOfBoundsBuffer, Position.Y);
-      }
-
-      if (Position.Y < -OutOfBoundsBuffer)
-      {
-         Position = new Vector2(Position.X, screenSize.Y + OutOfBoundsBuffer);
-      }
-      else if (Position.Y > screenSize.Y + OutOfBoundsBuffer)
-      {
-         Position = new Vector2(Position.X, -OutOfBoundsBuffer);
-      }
    }
 
    private void LimitVelocity()
