@@ -16,7 +16,6 @@ public partial class AsteroidManager : Node2D
    [Export]
    public Rect2 InitialNoSpawnZone { get; set; }
 
-   private const int OutOfBoundsBuffer = 50;
    private const int SpawnBuffer = 30;
 
    public override void _Ready()

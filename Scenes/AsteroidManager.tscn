@@ -9,6 +9,3 @@
 script = ExtResource("1_jenya")
 AsteroidBaseScene = ExtResource("2_l0el0")
 SpecificAsteroidScenes = Array[PackedScene]([ExtResource("3_ardsr"), ExtResource("4_vqu4c")])
-
-[node name="SpawnTimer" type="Timer" parent="."]
-autostart = true

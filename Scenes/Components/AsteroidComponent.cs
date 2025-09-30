@@ -5,8 +5,6 @@ using System;
 public partial class AsteroidComponent : Node
 {
    [Export]
-   public Node2D AsteroidNode2D { get; set; }
-   [Export]
    public Area2D AsteroidArea2D { get; set; }
    public float RotationSpeedRadians { get; set; } = 0f;
    public Vector2 Velocity { get; set; } = Vector2.Zero;
@@ -16,9 +14,9 @@ public partial class AsteroidComponent : Node
       AsteroidArea2D.AreaEntered += OnAreaEntered;
    }
 
-   private void OnAreaEntered(Area2D area)
+   private void OnAreaEntered(Area2D other)
    {
-      if (area is HurtboxComponent hurtboxComponent)
+      if (other is HurtboxComponent hurtboxComponent)
       {
          hurtboxComponent.TryKill(this.GetParentGroups());
       }
@@ -31,7 +29,8 @@ public partial class AsteroidComponent : Node
 
    public override void _PhysicsProcess(double delta)
    {
-      AsteroidNode2D.Rotate(RotationSpeedRadians * (float)delta);
-      AsteroidNode2D.Position += Velocity * (float)delta;
+      var parent = GetParent<Node2D>();
+      parent.Rotate(RotationSpeedRadians * (float)delta);
+      parent.Position += Velocity * (float)delta;
    }
 }

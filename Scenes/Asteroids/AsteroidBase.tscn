@@ -10,6 +10,7 @@
 script = ExtResource("1_a4k2s")
 
 [node name="ScreenWarpComponent" parent="." instance=ExtResource("2_qw8uj")]
+OutOfBoundsBuffer = 50
 
 [node name="AsteroidComponent" parent="." node_paths=PackedStringArray("AsteroidNode2D", "AsteroidArea2D") instance=ExtResource("1_dp033")]
 AsteroidNode2D = NodePath("..")
