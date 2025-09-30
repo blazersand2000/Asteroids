@@ -6,8 +6,10 @@ public partial class AsteroidComponent : Node
 {
    [Export]
    public Area2D AsteroidArea2D { get; set; }
-   public float RotationSpeedRadians { get; set; } = 0f;
-   public Vector2 Velocity { get; set; } = Vector2.Zero;
+   [Export]
+   public AsteroidSize Size { get; set; } = AsteroidSize.Large;
+   public float RotationSpeedRadians { get; set; }
+   public Vector2 Velocity { get; set; }
 
    public override void _Ready()
    {

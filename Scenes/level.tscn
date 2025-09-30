@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://dwlp176eorrto"]
+[gd_scene load_steps=8 format=3 uid="uid://dwlp176eorrto"]
 
 [ext_resource type="PackedScene" uid="uid://cbf74xd2hs22k" path="res://Scenes/StarManager.tscn" id="1_os22f"]
 [ext_resource type="PackedScene" uid="uid://dpd3k8ipovlxj" path="res://Scenes/ship.tscn" id="1_q7n7w"]
 [ext_resource type="PackedScene" uid="uid://c8uxhqcv0ystn" path="res://Scenes/Star.tscn" id="2_rhl2a"]
 [ext_resource type="PackedScene" uid="uid://db5sfftfj7t4s" path="res://Scenes/AsteroidManager.tscn" id="3_gm6gn"]
+[ext_resource type="PackedScene" uid="uid://dkl1klwmx42n6" path="res://Scenes/Asteroids/BigAsteroid1.tscn" id="5_jn6cq"]
+[ext_resource type="PackedScene" uid="uid://b2lsc3de38duv" path="res://Scenes/Asteroids/BigAsteroid2.tscn" id="6_vdtcn"]
+[ext_resource type="PackedScene" uid="uid://yx0cmfqbp4ps" path="res://Scenes/Asteroids/BigAsteroid3.tscn" id="7_lht6n"]
 
 [node name="Level" type="Node2D"]
 
@@ -22,3 +25,4 @@ LaserParent = NodePath("../ProjectileManager")
 
 [node name="AsteroidManager" parent="." instance=ExtResource("3_gm6gn")]
 NumberOfAsteroids = 10
+LargeAsteroidScenes = Array[PackedScene]([ExtResource("5_jn6cq"), ExtResource("6_vdtcn"), ExtResource("7_lht6n")])

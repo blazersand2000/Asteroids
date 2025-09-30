@@ -12,7 +12,9 @@ public partial class AsteroidManager : Node2D
    [Export]
    public PackedScene AsteroidBaseScene { get; set; }
    [Export]
-   public PackedScene[] SpecificAsteroidScenes { get; set; }
+   public PackedScene[] LargeAsteroidScenes { get; set; }
+   public PackedScene[] MediumAsteroidScenes { get; set; }
+   public PackedScene[] SmallAsteroidScenes { get; set; }
    [Export]
    public Rect2 InitialNoSpawnZone { get; set; }
 
@@ -84,21 +86,26 @@ public partial class AsteroidManager : Node2D
    private void SpawnRandomAsteroidInMainArea()
    {
       var position = GetRandomMainAreaSpawnLocation();
-      SpawnRandomAsteroid(position);
+      var visuals = LargeAsteroidScenes[GD.Randi() % LargeAsteroidScenes.Length];
+      var speed = GD.RandRange(100d, 300d);
+      var direction = GD.Randf() * Mathf.Tau;
+      var velocity = Vector2.Up.Rotated(direction) * (float)speed;
+      var rotationSpeedRadians = (float)GD.RandRange(-2d, 2d);
+
+      SpawnAsteroid(position, visuals, AsteroidSize.Large, velocity, rotationSpeedRadians);
    }
 
-   private void SpawnRandomAsteroid(Vector2 position)
+   private void SpawnAsteroid(Vector2 position, PackedScene visuals, AsteroidSize size, Vector2 velocity, float rotationSpeedRadians)
    {
       var asteroid = AsteroidBaseScene.Instantiate<AsteroidBase>();
-      asteroid.CallDeferred(AsteroidBase.MethodName.SetVisuals, SpecificAsteroidScenes[GD.Randi() % SpecificAsteroidScenes.Length]);
+      asteroid.CallDeferred(AsteroidBase.MethodName.SetVisuals, visuals);
       asteroid.AddToGroup(Groups.Enemy.ToString());
 
       if (asteroid.TryGetComponent<AsteroidComponent>(out var asteroidComponent))
       {
-         var speed = GD.RandRange(100d, 300d);
-         var direction = GD.Randf() * Mathf.Tau;
-         asteroidComponent.Velocity = Vector2.Up.Rotated(direction) * (float)speed;
-         asteroidComponent.RotationSpeedRadians = (float)GD.RandRange(-2d, 2d);
+         asteroidComponent.Size = size;
+         asteroidComponent.Velocity = velocity;
+         asteroidComponent.RotationSpeedRadians = rotationSpeedRadians;
       }
 
       if (asteroid.TryGetComponent<HealthComponent>(out var healthComponent))

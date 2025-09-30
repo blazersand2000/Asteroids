@@ -1,11 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://db5sfftfj7t4s"]
+[gd_scene load_steps=3 format=3 uid="uid://db5sfftfj7t4s"]
 
 [ext_resource type="Script" path="res://Scenes/AsteroidManager.cs" id="1_jenya"]
 [ext_resource type="PackedScene" uid="uid://dacblnl0jjgbb" path="res://Scenes/Asteroids/AsteroidBase.tscn" id="2_l0el0"]
-[ext_resource type="PackedScene" uid="uid://dkl1klwmx42n6" path="res://Scenes/Asteroids/BigAsteroid1.tscn" id="3_ardsr"]
-[ext_resource type="PackedScene" uid="uid://b2lsc3de38duv" path="res://Scenes/Asteroids/BigAsteroid2.tscn" id="4_vqu4c"]
 
 [node name="AsteroidManager" type="Node2D"]
 script = ExtResource("1_jenya")
 AsteroidBaseScene = ExtResource("2_l0el0")
-SpecificAsteroidScenes = Array[PackedScene]([ExtResource("3_ardsr"), ExtResource("4_vqu4c")])
