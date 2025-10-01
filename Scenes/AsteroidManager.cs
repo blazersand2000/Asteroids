@@ -3,6 +3,7 @@ using Godot;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 public partial class AsteroidManager : Node2D
@@ -13,8 +14,14 @@ public partial class AsteroidManager : Node2D
    public PackedScene AsteroidBaseScene { get; set; }
    [Export]
    public PackedScene[] LargeAsteroidScenes { get; set; }
+   [Export]
    public PackedScene[] MediumAsteroidScenes { get; set; }
+   [Export]
    public PackedScene[] SmallAsteroidScenes { get; set; }
+   [Export]
+   public int NumMedium { get; set; }
+   [Export]
+   public int NumSmall { get; set; }
    [Export]
    public Rect2 InitialNoSpawnZone { get; set; }
 
@@ -34,7 +41,14 @@ public partial class AsteroidManager : Node2D
    {
       for (int i = 0; i < NumberOfAsteroids; i++)
       {
-         SpawnRandomAsteroidInMainArea();
+         var position = GetRandomMainAreaSpawnLocation();
+         var visuals = LargeAsteroidScenes[GD.Randi() % LargeAsteroidScenes.Length];
+         var speed = GD.RandRange(100d, 300d);
+         var direction = GD.Randf() * Mathf.Tau;
+         var velocity = Vector2.Up.Rotated(direction) * (float)speed;
+         var rotationSpeedRadians = (float)GD.RandRange(-2d, 2d);
+
+         SpawnAsteroid(position, visuals, AsteroidSize.Large, velocity, rotationSpeedRadians);
       }
    }
 
@@ -120,7 +134,42 @@ public partial class AsteroidManager : Node2D
 
    private void OnAsteroidDestroyed(Node2D asteroid)
    {
-      GD.Print("Asteroid died!");
       asteroid.QueueFree();
+
+      if (!asteroid.TryGetComponent<AsteroidComponent>(out var asteroidComponent))
+      {
+         return;
+      }
+
+      if (asteroidComponent.Size == AsteroidSize.Small)
+      {
+         return;
+      }
+
+      var nextSize = asteroidComponent.Size == AsteroidSize.Medium ? AsteroidSize.Small : AsteroidSize.Medium;
+      var numberToSpawn = nextSize == AsteroidSize.Medium ? NumMedium : NumSmall;
+      for (int i = 0; i < numberToSpawn; i++)
+      {
+         var visuals = GetRandomAsteroidVisuals(nextSize);
+         var rotationChange = (float)GD.RandRange(-Mathf.Pi / 4, Mathf.Pi / 4);
+         var velocityChange = (float)GD.RandRange(0, 1.5);
+         var velocity = asteroidComponent.Velocity.Rotated(rotationChange) * velocityChange;
+         var rotationSpeedRadians = (float)GD.RandRange(-2d, 2d);
+
+         SpawnAsteroid(asteroid.Position, visuals, nextSize, velocity, rotationSpeedRadians);
+      }
+   }
+
+   private PackedScene GetRandomAsteroidVisuals(AsteroidSize size)
+   {
+      var randi = GD.Randi();
+      PackedScene[] scenes = size switch
+      {
+         AsteroidSize.Large => LargeAsteroidScenes,
+         AsteroidSize.Medium => MediumAsteroidScenes,
+         AsteroidSize.Small => SmallAsteroidScenes,
+         _ => LargeAsteroidScenes,
+      };
+      return scenes[randi % scenes.Length];
    }
 }

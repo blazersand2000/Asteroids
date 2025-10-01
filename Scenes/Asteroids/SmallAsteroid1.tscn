@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://lwk73umsgcyo"]
+
+[ext_resource type="Texture2D" uid="uid://bfadrxiyaixmp" path="res://Assets/Meteors/meteorGrey_small1.png" id="1_kdfsh"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yqfmn"]
+radius = 13.0384
+
+[node name="BigAsteroid1" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_kdfsh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_yqfmn")
