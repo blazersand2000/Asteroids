@@ -22,6 +22,7 @@ public partial class Ship : Node2D
    private Marker2D laserCannon;
    private Timer shootCooldownTimer;
    private AudioStreamPlayer audioStreamPlayer;
+   private AnimatedSprite2D animatedSprite2D;
    private Vector2 _velocity = Vector2.Zero;
    private bool canShoot = true;
 
@@ -31,6 +32,7 @@ public partial class Ship : Node2D
       laserCannon = GetNode<Marker2D>("LaserCannon");
       shootCooldownTimer = GetNode<Timer>("ShootCooldownTimer");
       audioStreamPlayer = GetNode<AudioStreamPlayer>("AudioStreamPlayer");
+      animatedSprite2D = GetNode<AnimatedSprite2D>("EngineBlastSprite");
 
       shootCooldownTimer.Timeout += OnShootCooldownTimeout;
 
@@ -80,6 +82,14 @@ public partial class Ship : Node2D
       {
          var direction = Vector2.Up.Rotated(Rotation);
          _velocity += direction * ThrustPower * (float)delta;
+
+         animatedSprite2D.Visible = true;
+         animatedSprite2D.Play("default");
+      }
+      else
+      {
+         animatedSprite2D.Visible = false;
+         animatedSprite2D.Stop();
       }
    }
 
