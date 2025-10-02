@@ -1,15 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://dpd3k8ipovlxj"]
+[gd_scene load_steps=7 format=3 uid="uid://dpd3k8ipovlxj"]
 
 [ext_resource type="Script" path="res://Scenes/Ship.cs" id="1_yq545"]
-[ext_resource type="Script" path="res://Polygon2d.cs" id="2_0h6eb"]
 [ext_resource type="PackedScene" uid="uid://b111ytsb2ldy1" path="res://Scenes/laser.tscn" id="2_o36rf"]
-[ext_resource type="Script" path="res://CollisionPolygon2d.cs" id="3_5pbt6"]
-[ext_resource type="Resource" uid="uid://r30dno8mlijr" path="res://shipPolygonResource.tres" id="3_lfvqw"]
+[ext_resource type="Texture2D" uid="uid://cbjj4goi8f1o" path="res://Assets/playerShip2_blue.png" id="3_smkqd"]
 [ext_resource type="PackedScene" uid="uid://b8af0ughudgiy" path="res://Scenes/Components/healthComponent.tscn" id="6_6qwnn"]
 [ext_resource type="PackedScene" uid="uid://i85o803dc5qo" path="res://Scenes/Components/ScreenWarpComponent.tscn" id="7_ft5qr"]
 [ext_resource type="AudioStream" uid="uid://bqe25tqxe00xn" path="res://Assets/Sounds/sfx_laser2.ogg" id="8_n3d7o"]
 
-[node name="Ship" type="Area2D" node_paths=PackedStringArray("HealthComponent")]
+[node name="Ship" type="Node2D" node_paths=PackedStringArray("HealthComponent")]
 script = ExtResource("1_yq545")
 ThrustPower = 500.0
 RotationSpeed = 4.0
@@ -17,16 +15,8 @@ MaxSpeed = 300.0
 LaserScene = ExtResource("2_o36rf")
 HealthComponent = NodePath("HealthComponent")
 
-[node name="Polygon2D" type="Polygon2D" parent="."]
-color = Color(1, 0.501961, 1, 1)
-polygon = PackedVector2Array(-24, 32, 0, -32, 24, 32)
-script = ExtResource("2_0h6eb")
-ShipPolygonResource = ExtResource("3_lfvqw")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-24, 32, 0, -32, 24, 32)
-script = ExtResource("3_5pbt6")
-ShipPolygonResource = ExtResource("3_lfvqw")
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_smkqd")
 
 [node name="LaserCannon" type="Marker2D" parent="."]
 position = Vector2(0, -29)

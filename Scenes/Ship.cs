@@ -3,7 +3,7 @@ using System;
 using System.Text.RegularExpressions;
 using Asteroids;
 
-public partial class Ship : Area2D
+public partial class Ship : Node2D
 {
    [Export]
    public float ThrustPower = 1000f;
