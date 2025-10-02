@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dpd3k8ipovlxj"]
+[gd_scene load_steps=11 format=3 uid="uid://dpd3k8ipovlxj"]
 
 [ext_resource type="Script" path="res://Scenes/Ship.cs" id="1_yq545"]
 [ext_resource type="PackedScene" uid="uid://b111ytsb2ldy1" path="res://Scenes/laser.tscn" id="2_o36rf"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://edemhcy2pyb6" path="res://Assets/fire06.png" id="4_6sbim"]
 [ext_resource type="Texture2D" uid="uid://bf02bmeen24uo" path="res://Assets/fire07.png" id="5_nqlfa"]
 [ext_resource type="PackedScene" uid="uid://b8af0ughudgiy" path="res://Scenes/Components/healthComponent.tscn" id="6_6qwnn"]
+[ext_resource type="PackedScene" uid="uid://do44nvx8qhn8k" path="res://Scenes/Components/HurtboxComponent.tscn" id="7_ctocd"]
 [ext_resource type="PackedScene" uid="uid://i85o803dc5qo" path="res://Scenes/Components/ScreenWarpComponent.tscn" id="7_ft5qr"]
 [ext_resource type="AudioStream" uid="uid://bqe25tqxe00xn" path="res://Assets/Sounds/sfx_laser2.ogg" id="8_n3d7o"]
 
@@ -49,6 +50,13 @@ wait_time = 0.5
 one_shot = true
 
 [node name="HealthComponent" parent="." instance=ExtResource("6_6qwnn")]
+
+[node name="HurtboxComponent" parent="." node_paths=PackedStringArray("HealthComponent") instance=ExtResource("7_ctocd")]
+collision_mask = 2
+HealthComponent = NodePath("../HealthComponent")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HurtboxComponent"]
+polygon = PackedVector2Array(0, -36, -4, -36, -12, -16, -52, 8, -36, 32, -16, 28, -12, 36, 12, 36, 16, 28, 36, 32, 52, 8, 12, -16, 4, -36)
 
 [node name="ScreenWarpComponent" parent="." instance=ExtResource("7_ft5qr")]
 OutOfBoundsBuffer = 32

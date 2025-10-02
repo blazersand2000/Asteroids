@@ -20,6 +20,7 @@ AsteroidArea2D = NodePath("../HurtboxComponent")
 [node name="AsteroidSprite" type="Sprite2D" parent="."]
 
 [node name="HurtboxComponent" parent="." node_paths=PackedStringArray("HealthComponent") instance=ExtResource("4_y7223")]
+collision_layer = 2
 HealthComponent = NodePath("../HealthComponent")
 
 [node name="AsteroidCollisionShape" type="CollisionShape2D" parent="HurtboxComponent"]
