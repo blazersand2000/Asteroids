@@ -152,7 +152,7 @@ public partial class AsteroidManager : Node2D
       {
          var visuals = GetRandomAsteroidVisuals(nextSize);
          var rotationChange = (float)GD.RandRange(-Mathf.Pi / 4, Mathf.Pi / 4);
-         var velocityChange = (float)GD.RandRange(0, 1.5);
+         var velocityChange = (float)GD.RandRange(1, 1.5);
          var velocity = asteroidComponent.Velocity.Rotated(rotationChange) * velocityChange;
          var rotationSpeedRadians = (float)GD.RandRange(-2d, 2d);
 
