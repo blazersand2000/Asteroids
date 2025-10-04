@@ -9,11 +9,15 @@ public partial class Laser : Area2D
    [Export]
    public float Speed = 50;
    private const float OutOfBoundsBuffer = 200f;
+   private Sprite2D _sprite;
 
    // Called when the node enters the scene tree for the first time.
    public override void _Ready()
    {
+      _sprite = GetNode<Sprite2D>("Sprite2D");
+
       AddToGroup(Groups.PlayerProjectile.ToString());
+      ApplyInitialEffects();
       AreaEntered += OnAreaEntered;
    }
 
@@ -49,5 +53,13 @@ public partial class Laser : Area2D
          GD.Print($"laser killed asteroid? {killedTheThing}");
          QueueFree();
       }
+   }
+
+   private void ApplyInitialEffects()
+   {
+      var originalColor = _sprite.Modulate;
+      _sprite.Modulate = new Color(4, 4, 4);
+      var tween = GetTree().CreateTween();
+      tween.TweenProperty(_sprite, "modulate", originalColor, 0.3f);
    }
 }
