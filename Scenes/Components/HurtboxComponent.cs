@@ -6,6 +6,8 @@ using System.Linq;
 
 public partial class HurtboxComponent : Area2D
 {
+   [Signal]
+   public delegate void HitEventHandler(Vector2 position);
    [Export]
    public HealthComponent HealthComponent { get; set; }
    // [Export]
@@ -22,8 +24,13 @@ public partial class HurtboxComponent : Area2D
    {
    }
 
-   public void Kill()
+   /// <summary>
+   /// Triggers the hurtbox's kill logic, killing the associated HealthComponent.
+   /// </summary>
+   /// <param name="killPoint">The position where the hit occurred.</param>
+   public void Kill(Vector2 killPoint)
    {
+      EmitSignal(nameof(Hit), killPoint);
       HealthComponent?.Kill();
    }
 }
