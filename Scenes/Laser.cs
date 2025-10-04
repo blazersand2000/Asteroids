@@ -49,8 +49,7 @@ public partial class Laser : Area2D
    {
       if (area is HurtboxComponent hurtboxComponent)
       {
-         var killedTheThing = hurtboxComponent.TryKill(GetGroups());
-         GD.Print($"laser killed asteroid? {killedTheThing}");
+         hurtboxComponent.Kill();
          QueueFree();
       }
    }

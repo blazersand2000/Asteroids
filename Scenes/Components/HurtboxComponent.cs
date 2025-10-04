@@ -22,37 +22,8 @@ public partial class HurtboxComponent : Area2D
    {
    }
 
-   public bool TryHurt(Godot.Collections.Array<StringName> attackerGroups, int damage)
+   public void Kill()
    {
-      return TryHurt(attackerGroups.Select(g => g.ToString()), damage);
-   }
-
-   public bool TryHurt(IEnumerable<string> attackerGroups, int damage)
-   {
-      if (!DamageRules.CanDamage(attackerGroups, this.GetParentGroups()))
-      {
-         return false;
-      }
-
-      HealthComponent?.TakeDamage(damage);
-
-      return true;
-   }
-
-   public bool TryKill(Godot.Collections.Array<StringName> attackerGroups)
-   {
-      return TryKill(attackerGroups.Select(g => g.ToString()));
-   }
-
-   public bool TryKill(IEnumerable<string> attackerGroups)
-   {
-      if (!DamageRules.CanDamage(attackerGroups, this.GetParentGroups()))
-      {
-         return false;
-      }
-
       HealthComponent?.Kill();
-
-      return true;
    }
 }

@@ -20,7 +20,7 @@ public partial class AsteroidComponent : Node
    {
       if (other is HurtboxComponent hurtboxComponent)
       {
-         hurtboxComponent.TryKill(this.GetParentGroups());
+         hurtboxComponent.Kill();
       }
    }
 
