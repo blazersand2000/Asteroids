@@ -3,6 +3,7 @@ using System;
 
 public partial class Explosion : Node2D
 {
+   public Vector2 Velocity { get; set; } = Vector2.Zero;
    private GpuParticles2D _particle;
    private Timer _despawnTimer;
 
@@ -19,5 +20,6 @@ public partial class Explosion : Node2D
    // Called every frame. 'delta' is the elapsed time since the previous frame.
    public override void _Process(double delta)
    {
+      Position += Velocity * (float)delta;
    }
 }

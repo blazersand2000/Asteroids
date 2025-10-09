@@ -8,8 +8,7 @@ public partial class Laser : Area2D
 {
    [Export]
    public float Speed { get; set; } = 50;
-   [Export]
-   public PackedScene ExplosionScene { get; set; }
+
    private const float OutOfBoundsBuffer = 200f;
    private Sprite2D _sprite;
 
@@ -52,9 +51,6 @@ public partial class Laser : Area2D
       if (area is HurtboxComponent hurtboxComponent)
       {
          hurtboxComponent.Kill(GlobalPosition);
-         var explosion = ExplosionScene.Instantiate<Node2D>();
-         explosion.GlobalPosition = GlobalPosition;
-         GetParent().AddChild(explosion);
          QueueFree();
       }
    }
