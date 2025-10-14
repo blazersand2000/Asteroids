@@ -7,4 +7,5 @@ public enum Groups
    Player,
    PlayerProjectile,
    Enemy,
+   Explodable
 }
