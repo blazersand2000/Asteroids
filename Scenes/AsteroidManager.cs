@@ -118,8 +118,12 @@ public partial class AsteroidManager : Node2D
       if (asteroid.TryGetComponent<AsteroidComponent>(out var asteroidComponent))
       {
          asteroidComponent.Size = size;
-         asteroidComponent.Velocity = velocity;
          asteroidComponent.RotationSpeedRadians = rotationSpeedRadians;
+      }
+
+      if (asteroid.TryGetComponent<VelocityComponent>(out var velocityComponent))
+      {
+         velocityComponent.Velocity = velocity;
       }
 
       if (asteroid.TryGetComponent<HealthComponent>(out var healthComponent))
@@ -141,6 +145,11 @@ public partial class AsteroidManager : Node2D
          return;
       }
 
+      if (!asteroid.TryGetComponent<VelocityComponent>(out var velocityComponent))
+      {
+         return;
+      }
+
       if (asteroidComponent.Size == AsteroidSize.Small)
       {
          return;
@@ -153,7 +162,7 @@ public partial class AsteroidManager : Node2D
          var visuals = GetRandomAsteroidVisuals(nextSize);
          var rotationChange = (float)GD.RandRange(-Mathf.Pi / 4, Mathf.Pi / 4);
          var velocityChange = (float)GD.RandRange(1, 1.5);
-         var velocity = asteroidComponent.Velocity.Rotated(rotationChange) * velocityChange;
+         var velocity = velocityComponent.Velocity.Rotated(rotationChange) * velocityChange;
          var rotationSpeedRadians = (float)GD.RandRange(-2d, 2d);
 
          SpawnAsteroid(asteroid.Position, visuals, nextSize, velocity, rotationSpeedRadians);

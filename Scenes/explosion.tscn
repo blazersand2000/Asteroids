@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://dxr27ql8u0brb"]
+[gd_scene load_steps=10 format=3 uid="uid://dxr27ql8u0brb"]
 
 [ext_resource type="Script" path="res://Scenes/Explosion.cs" id="1_fx4er"]
 [ext_resource type="Texture2D" uid="uid://bkgmcyu3hxjob" path="res://Assets/fire_01.png" id="1_kemuw"]
+[ext_resource type="Texture2D" uid="uid://dy8yfknfotbxf" path="res://Assets/Meteors/meteorBrown_big3.png" id="2_h2a14"]
+[ext_resource type="PackedScene" uid="uid://b4uafaowsv0g8" path="res://Scenes/Components/VelocityComponent.tscn" id="3_7lbtm"]
 
 [sub_resource type="Gradient" id="Gradient_whik8"]
 interpolation_mode = 2
@@ -45,8 +47,14 @@ lifetime = 0.5
 one_shot = true
 preprocess = 0.1
 explosiveness = 0.6
+local_coords = true
 
 [node name="DespawnTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
 autostart = true
+
+[node name="VelocityComponent" parent="." instance=ExtResource("3_7lbtm")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_h2a14")

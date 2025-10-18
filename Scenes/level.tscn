@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dwlp176eorrto"]
+[gd_scene load_steps=11 format=3 uid="uid://dwlp176eorrto"]
 
 [ext_resource type="PackedScene" uid="uid://cbf74xd2hs22k" path="res://Scenes/StarManager.tscn" id="1_os22f"]
 [ext_resource type="PackedScene" uid="uid://dpd3k8ipovlxj" path="res://Scenes/ship.tscn" id="1_q7n7w"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://yx0cmfqbp4ps" path="res://Scenes/Asteroids/BigAsteroid3.tscn" id="7_lht6n"]
 [ext_resource type="PackedScene" uid="uid://5ssqjb705rer" path="res://Scenes/Asteroids/MediumAsteroid1.tscn" id="8_wkbcx"]
 [ext_resource type="PackedScene" uid="uid://lwk73umsgcyo" path="res://Scenes/Asteroids/SmallAsteroid1.tscn" id="9_wpq5p"]
+[ext_resource type="PackedScene" uid="uid://b782i52ig8r00" path="res://Scenes/EffectsManager.tscn" id="10_3w22d"]
 
 [node name="Level" type="Node2D"]
 
@@ -32,3 +33,5 @@ MediumAsteroidScenes = Array[PackedScene]([ExtResource("8_wkbcx")])
 SmallAsteroidScenes = Array[PackedScene]([ExtResource("9_wpq5p")])
 NumMedium = 2
 NumSmall = 3
+
+[node name="EffectsManager" parent="." instance=ExtResource("10_3w22d")]

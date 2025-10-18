@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://b782i52ig8r00"]
+
+[ext_resource type="Script" path="res://Scenes/EffectsManager.cs" id="1_x74dd"]
+[ext_resource type="PackedScene" uid="uid://dxr27ql8u0brb" path="res://Scenes/explosion.tscn" id="2_41diy"]
+
+[node name="EffectsManager" type="Node2D"]
+script = ExtResource("1_x74dd")
+ExplosionScene = ExtResource("2_41diy")

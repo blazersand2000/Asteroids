@@ -19,6 +19,10 @@ config/icon="res://icon.svg"
 
 buses/default_bus_layout=""
 
+[autoload]
+
+GlobalBus="*res://Autoloads/GlobalBus.tscn"
+
 [dotnet]
 
 project/assembly_name="Asteroids"

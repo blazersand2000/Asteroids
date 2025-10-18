@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bhiewfwttlmyq"]
-
-[ext_resource type="Script" path="res://Scenes/Components/MovementTrackerComponent.cs" id="1_fm1y1"]
-
-[node name="MovementTrackerComponent" type="Node"]
-script = ExtResource("1_fm1y1")

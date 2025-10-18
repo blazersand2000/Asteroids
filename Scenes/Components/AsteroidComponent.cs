@@ -9,7 +9,6 @@ public partial class AsteroidComponent : Node
    [Export]
    public AsteroidSize Size { get; set; } = AsteroidSize.Large;
    public float RotationSpeedRadians { get; set; }
-   public Vector2 Velocity { get; set; }
 
    public override void _Ready()
    {
@@ -33,6 +32,5 @@ public partial class AsteroidComponent : Node
    {
       var parent = GetParent<Node2D>();
       parent.Rotate(RotationSpeedRadians * (float)delta);
-      parent.Position += Velocity * (float)delta;
    }
 }
